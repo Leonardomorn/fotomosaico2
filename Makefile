@@ -2,7 +2,7 @@
 #made by Leonardo da Silva Camargo
 #GRR 20203903
 
-CFLAGS = -Wall -std=gnu99
+CFLAGS = -Wall -std=gnu99 -g
 LDLIBS = -lm
 
 objs = main.o tiles.o list.o ppm.o

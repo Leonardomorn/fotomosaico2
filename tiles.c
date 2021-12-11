@@ -78,6 +78,7 @@ void read_tiles(int tiles_num, char *argv[], int argc, t_list* tiles_list)
         printf("the path is %s\n", path);
 
 	}
+	strcpy(path, "/");
 	read_ppm_diretory(path, tiles_list);
 	printf("saiu de read tiles\n");
 

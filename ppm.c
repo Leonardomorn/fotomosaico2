@@ -49,6 +49,7 @@ void calculate_average_color(PPM* ppm)
 
 void read_P6(char type[], FILE *fpt, t_list *l)
 {
+    printf("entrou em read_P6");
 	PPM* ppm; 
 	ppm = malloc (sizeof(PPM));
 
@@ -90,15 +91,13 @@ void read_P6(char type[], FILE *fpt, t_list *l)
 	}
 
           
-
+    printf("saiu de read_p6");
 }
 
 int read_ppm(char *path_file, t_list *l)
 {
    char type[3];   
    FILE *fpt = fopen(path_file, "r");
-   int i;
-
 
 
      if (!fpt)
@@ -107,6 +106,7 @@ int read_ppm(char *path_file, t_list *l)
           return 0;
      }
      fscanf(fpt, "%s ", type);
+     fprintf(stderr, "type is %s", type);
      if(strcmp(type, "P6") == 0 ) /*verifica se é P6*/
      {
          read_P6(type, fpt, l);
@@ -121,7 +121,7 @@ int read_ppm(char *path_file, t_list *l)
      }
           else if (strcmp(type, "P3") == 0 ) /*Verifica se é P3*/
           {
-			  return;            
+			  return 0;            
           }
                else /*a pastilha não é valida*/
                {
