@@ -38,7 +38,13 @@ void read_ppm_diretory(char* directory, t_list* tiles_list){
 
      DIR *dirstream;
      struct dirent *direntry;
-     char buffer[100];
+     char buffer[1024];
+
+	 for (int i = 0; i < 1024; i++)
+	 {
+		buffer[i] = '\0';
+	 }
+	 
 
      dirstream = opendir (directory);
      direntry = readdir (dirstream);
@@ -50,7 +56,7 @@ void read_ppm_diretory(char* directory, t_list* tiles_list){
 
                strcat (buffer, directory);
                strcat (buffer, direntry->d_name);
-
+			
                read_ppm (buffer, tiles_list);
 
                memset (buffer, 0, sizeof (buffer));
@@ -65,22 +71,58 @@ void read_ppm_diretory(char* directory, t_list* tiles_list){
 
 void read_tiles(int tiles_num, char *argv[], int argc, t_list* tiles_list)
 {
-	printf("entrou em read_tiles\n");
-    char* path = NULL;
-	for(int i = 0; i < argc; i++)
+    char* def_dir = "tiles";
+    char* changed_dir = NULL;
+    int size = 0;
+
+    for(int i = 0; i < argc; i++)
 	{
 		if(strcmp(argv[i], "-p") == 0)
-			path = argv[i+1]; 
+        {
+            if(argv[i+1] == NULL)
+            {
+                fprintf(stderr, "No argument found for -p!\n");
+                exit(1);
+            }
+            else
+            {
+                size = strlen(argv[i + 1]);
+                changed_dir = (char*)malloc((size + 2) * sizeof(char));
+                if(!changed_dir)
+                {
+                    perror("Insufficient memory");
+                    exit(1);
+                }
+                for(int j = 0; j < size; j++)
+                    changed_dir[j] = argv[i + 1][j];
+                changed_dir[size] = '/';
+                changed_dir[size + 1] = '\0';
+            }
+        }
 	}
-	if(path == NULL)
-	{
-		path = "tiles";
-        printf("the path is %s\n", path);
 
-	}
-	strcpy(path, "/");
-	read_ppm_diretory(path, tiles_list);
-	printf("saiu de read tiles\n");
+    if(changed_dir == NULL)
+    {
+        size = strlen(def_dir);
+        changed_dir = (char*)malloc((size + 2) * sizeof(char));
+        if(!changed_dir)
+        {
+            perror("Insufficient memory");
+            exit(1);
+        }
+        for(int k = 0; k < size; k++)
+            changed_dir[k] = def_dir[k];
+        changed_dir[size] = '/';
+        changed_dir[size + 1] = '\0';
+    }
+
+    printf("%s\n", changed_dir);
+    
+	read_ppm_diretory(changed_dir, tiles_list);
+
+
+	free(changed_dir);
+
 
 }
 
