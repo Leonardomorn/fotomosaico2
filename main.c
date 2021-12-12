@@ -17,12 +17,16 @@ int main (int argc, char* argv[])
     PPM* image_ptr_new;
     int tiles_num = 0;
 
+    char* outputtest = "output.ppm";
+
     printf("calculating number of tiles\n");
     tiles_num = number_of_tiles_on_directory (argv, argc);
     printf("Number of tiles is: %d\n", tiles_num);
 
     read_tiles(tiles_num, argv, argc, &tiles_list);
-    // read_image(argv, argc, &image_ptr);
+    read_image(argv, argc, &image_ptr);
+    cut_image(&image_ptr, tiles_list);
+    write_image(image_ptr, outputtest);
     destroy_list(&tiles_list);
 
 }

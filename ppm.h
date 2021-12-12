@@ -15,3 +15,5 @@ int read_ppm(char *path_file, t_list *l);
 int read_ppm_image(char *image_name, PPM** image_ptr);
 void read_image_P6(char type[], FILE* fpt, PPM** image_ptr);
 void read_image_P3(char type[],  FILE* fpt, PPM** image_ptr);
+void write_image(PPM* ppm, char* output);
+void cut_image(PPM** image_ptr, t_list tiles_list);
