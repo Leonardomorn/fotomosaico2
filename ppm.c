@@ -47,23 +47,35 @@ void calculate_average_color(PPM *ppm)
 
 void read_P6(char type[], FILE *fpt, t_list *l)
 {
-    printf("entrou em read_P6");
+    printf("entrou em read_P6\n");
     PPM *ppm;
     ppm = malloc(sizeof(PPM));
 
     strncpy(ppm->type, type, 3);
+
+    printf("guardou o tipo P\n");
+
     commentary_ignore(fpt);
 
-    fscanf(fpt, " %d %d ", &(ppm->width), &(ppm->height));
-    commentary_ignore(fpt);
+    printf("ignorou comentário \n");
 
-    fscanf(fpt, "%d ", &(ppm->max));
-    commentary_ignore(fpt);
+    fscanf(fpt, "%d %d\n", &(ppm->width), &(ppm->height));
 
-    ppm->matriz_pixel = malloc(ppm->height * sizeof(Pixel));
+    printf("LARGURA é %d", ppm->width );
+
+    fscanf(fpt, "%d\n", &(ppm->max));
+
+    ppm->matriz_pixel = (Pixel**)malloc(ppm->height * sizeof(Pixel*));
+    if(!ppm->matriz_pixel){ 
+        fprintf(stderr, "não alocou memória");
+        exit(0);
+    }
     for (int i = 0; i < ppm->height; i++)
     {
-        ppm->matriz_pixel[i] = malloc(ppm->width * sizeof(Pixel));
+        ppm->matriz_pixel[i] = (Pixel*) malloc(ppm->width * sizeof(Pixel));
+        if(!ppm->matriz_pixel[i]){
+            fprintf(stderr, "não alocou memória");
+        }
     }
 
     for (int i = 0; i < ppm->height; i++)
@@ -103,9 +115,10 @@ int read_ppm(char *path_file, t_list *l)
     }
     printf("opening %s\n", path_file);
     fscanf(fpt, "%s ", type);
-    fprintf(stderr, "type is %s", type);
+    fprintf(stderr, "type is %s\n", type);
     if (strcmp(type, "P6") == 0) /*verifica se é P6*/
     {
+        printf("É UM P6\n");
         read_P6(type, fpt, l);
         /*            printf("%s\n", ppm->type);
           printf("%d %d\n", ppm->lar, ppm->alt);
