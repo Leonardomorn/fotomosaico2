@@ -1,5 +1,7 @@
 #include "ppm.h"
 
+int sucesso = 0;
+
 void commentary_ignore(FILE *fpt)
 {
     char c;
@@ -88,7 +90,8 @@ void read_P6(char type[], FILE *fpt, t_list *l)
                    &(ppm->matriz_pixel[i][j].blue));
         }
     }
-
+    sucesso++;
+    printf("\n NÚMERO DE LIDOS: %d \n", sucesso);
     calculate_average_color(ppm);
 
     if (list_is_empty(l))
@@ -100,7 +103,7 @@ void read_P6(char type[], FILE *fpt, t_list *l)
         append(l, ppm);
     }
 
-    printf("saiu de read_p6");
+    printf("saiu de read_p6\n");
 }
 
 void read_P3(char type[], FILE * fpt, t_list* l)
@@ -200,8 +203,6 @@ int read_ppm_image(char *image_name, PPM** image_ptr)
 {
      char type[3];   
      FILE *fpt = fopen(image_name, "r");
-     int i;
-
 
 
      if (!fpt)
@@ -232,7 +233,7 @@ int read_ppm_image(char *image_name, PPM** image_ptr)
      return 0;
 }
 
-void read_image_P6(char *type [], FILE* fpt, PPM** image_ptr)
+void read_image_P6(char type[], FILE* fpt, PPM** image_ptr)
 {
     PPM* ppm;
     ppm = malloc(sizeof(PPM));   
@@ -242,7 +243,7 @@ void read_image_P6(char *type [], FILE* fpt, PPM** image_ptr)
     }
 
     strncpy(ppm->type, type, 3);
-    ignora_comentario(fpt);
+    commentary_ignore(fpt);
     
     fscanf(fpt, " %d %d ", &(ppm->width), &(ppm->height));
     
@@ -279,7 +280,7 @@ void read_image_P6(char *type [], FILE* fpt, PPM** image_ptr)
     
 }
 
-void read_image_P3(char* type[],  FILE* fpt, PPM** image_ptr)
+void read_image_P3(char type[],  FILE* fpt, PPM** image_ptr)
 {
     PPM* ppm;
     ppm = malloc(sizeof(PPM));
@@ -290,7 +291,7 @@ void read_image_P3(char* type[],  FILE* fpt, PPM** image_ptr)
     }
 
     strncpy(ppm->type, type, 3);
-    ignora_comentario(fpt);
+    commentary_ignore(fpt);
     
     fscanf(fpt, " %d %d ", &(ppm->width), &(ppm->height));
     

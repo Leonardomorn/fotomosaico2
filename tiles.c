@@ -126,7 +126,7 @@ void read_tiles(int tiles_num, char *argv[], int argc, t_list* tiles_list)
 
 }
 
-void read_image(char* argv[], int argc, t_list** image_ptr)
+void read_image(char* argv[], int argc, PPM** image_ptr)
 {
     char* image_name = NULL;
 	for(int i = 0; i < argc; i++)
@@ -136,7 +136,7 @@ void read_image(char* argv[], int argc, t_list** image_ptr)
 	}
 	if(image_name == NULL)
 	{
-        fprintf(stderr, "argument not found for -i!", image_name);
+        fprintf(stderr, "argument not found for -i!");
         exit(1);
 	}
 
