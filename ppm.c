@@ -173,7 +173,7 @@ int read_ppm(char *path_file, t_list *l)
     if (!fpt)
     {
         fprintf(stderr, "unable to open %s \n", path_file);
-        return 0;
+        exit(0);
     }
     printf("opening %s\n", path_file);
     fscanf(fpt, "%s ", type);
