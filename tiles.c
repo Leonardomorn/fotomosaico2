@@ -126,3 +126,20 @@ void read_tiles(int tiles_num, char *argv[], int argc, t_list* tiles_list)
 
 }
 
+void read_image(char* argv[], int argc, t_list** image_ptr)
+{
+    char* image_name = NULL;
+	for(int i = 0; i < argc; i++)
+	{
+		if(strcmp(argv[i], "-i") == 0)
+			image_name = argv[i+1]; 
+	}
+	if(image_name == NULL)
+	{
+        fprintf(stderr, "argument not found for -i!", image_name);
+        exit(1);
+	}
+
+    read_ppm_image(image_name, image_ptr);
+    
+}

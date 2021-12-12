@@ -22,6 +22,7 @@ int main (int argc, char* argv[])
     printf("Number of tiles is: %d\n", tiles_num);
 
     read_tiles(tiles_num, argv, argc, &tiles_list);
-
+    read_image(argv, argc, &image_ptr);
+    destroy_list(&tiles_list);
 
 }

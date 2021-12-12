@@ -15,3 +15,4 @@ int number_of_tiles_on_directory(char *argv[], int argc); /*return the number of
                                                             tiles by default*/
 void read_ppm_diretory(char* directory, t_list* tiles_list);
 void read_tiles(int tiles_num, char *argv[], int argc, t_list* tiles_list);
+void read_image(char* argv[], int argc, t_list** image_ptr);

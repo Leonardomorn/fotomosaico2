@@ -103,6 +103,65 @@ void read_P6(char type[], FILE *fpt, t_list *l)
     printf("saiu de read_p6");
 }
 
+void read_P3(char type[], FILE * fpt, t_list* l)
+{
+    printf("entrou em read_P3\n");
+    PPM *ppm;
+    ppm = malloc(sizeof(PPM));
+    int r = 0; int b = 0; int g = 0;
+
+    strncpy(ppm->type, type, 3);
+
+    printf("guardou o tipo P\n");
+
+    commentary_ignore(fpt);
+
+    printf("ignorou comentário \n");
+
+    fscanf(fpt, "%d %d\n", &(ppm->width), &(ppm->height));
+
+    printf("LARGURA é %d", ppm->width );
+
+    fscanf(fpt, "%d\n", &(ppm->max));
+
+    ppm->matriz_pixel = (Pixel**)malloc(ppm->height * sizeof(Pixel*));
+    if(!ppm->matriz_pixel){ 
+        fprintf(stderr, "não alocou memória");
+        exit(0);
+    }
+    for (int i = 0; i < ppm->height; i++)
+    {
+        ppm->matriz_pixel[i] = (Pixel*) malloc(ppm->width * sizeof(Pixel));
+        if(!ppm->matriz_pixel[i]){
+            fprintf(stderr, "não alocou memória");
+        }
+    }
+
+    for (int i = 0; i < ppm->height; i++)
+    {
+        for (int j = 0; j < ppm->width; j++)
+        {
+            fscanf(fpt, "%d%d%d", &r, &g, &b );
+            ppm->matriz_pixel[i][j].red   = r;
+            ppm->matriz_pixel[i][j].green = g;
+            ppm->matriz_pixel[i][j].blue  = b;
+        }
+    }
+
+    calculate_average_color(ppm);
+
+    if (list_is_empty(l))
+    {
+        add_empty_list(l, ppm);
+    }
+    else
+    {
+        append(l, ppm);
+    }
+
+    printf("saiu de read_P3");    
+}
+
 int read_ppm(char *path_file, t_list *l)
 {
     char type[3];
@@ -118,26 +177,151 @@ int read_ppm(char *path_file, t_list *l)
     fprintf(stderr, "type is %s\n", type);
     if (strcmp(type, "P6") == 0) /*verifica se é P6*/
     {
-        printf("É UM P6\n");
         read_P6(type, fpt, l);
-        /*            printf("%s\n", ppm->type);
-          printf("%d %d\n", ppm->lar, ppm->alt);
-          printf("%d\n", ppm->max);
-          for(i=0; i<(ppm->alt * ppm->lar); i++)
-          {
-               printf("%c%c%c", ppm->matriz_pixel[i].red, ppm->matriz_pixel[i].green, ppm->matriz_pixel[i].blue);
-          }
-  */
+        return 1;
+
     }
     else if (strcmp(type, "P3") == 0) /*Verifica se é P3*/
     {
-        return 0;
+        read_P3(type, fpt, l);
+        return 1;
     }
     else /*a pastilha não é valida*/
     {
         exit(0);
     }
 
+
     fclose(fpt);
     return 0;
+}
+
+int read_ppm_image(char *image_name, PPM** image_ptr)
+{
+     char type[3];   
+     FILE *fpt = fopen(image_name, "r");
+     int i;
+
+
+
+     if (!fpt)
+     {
+          fprintf(stderr , "unable to open %s \n", image_name);
+          return 0;
+     }
+     fscanf(fpt, "%s ", type);
+     if(strcmp(type, "P6") == 0 ) /*verifica se é P6*/
+     {
+        read_image_P6(type, fpt, image_ptr);
+        return 1;
+
+     }
+          else if (strcmp(type, "P3") == 0 ) /*Verifica se é P3*/
+          {
+              read_image_P3(type, fpt, image_ptr);
+              return 1;
+          }
+               else /*a imagem não é valida*/
+               {
+                    exit(0);
+               }
+
+
+
+     fclose(fpt);
+     return 0;
+}
+
+void read_image_P6(char *type [], FILE* fpt, PPM** image_ptr)
+{
+    PPM* ppm;
+    ppm = malloc(sizeof(PPM));   
+    if(ppm == NULL)
+    {
+        fprintf(stderr, "allocate ppm error\n");
+    }
+
+    strncpy(ppm->type, type, 3);
+    ignora_comentario(fpt);
+    
+    fscanf(fpt, " %d %d ", &(ppm->width), &(ppm->height));
+    
+    fscanf(fpt, "%d ", &(ppm->max)); 
+
+    ppm->matriz_pixel = (Pixel**)malloc(ppm->height * sizeof(Pixel*));
+    if(!ppm->matriz_pixel){ 
+        fprintf(stderr, "memory alocate error");
+        exit(0);
+    }
+    for (int i = 0; i < ppm->height; i++)
+    {
+        ppm->matriz_pixel[i] = (Pixel*) malloc(ppm->width * sizeof(Pixel));
+        if(!ppm->matriz_pixel[i]){
+            fprintf(stderr, "memory alocate error");
+        }
+    }
+             
+    for(int i=0; i<ppm->height; i++)
+    {
+        for (int j = 0; j < ppm->width; j++)
+        {
+            fscanf(fpt,"%c%c%c", 
+             &(ppm->matriz_pixel[i][j].red) ,
+              &(ppm->matriz_pixel[i][j].green),
+               &(ppm->matriz_pixel[i][j].blue) );
+        }
+        
+
+    }              
+    
+
+    *image_ptr = ppm;
+    
+}
+
+void read_image_P3(char* type[],  FILE* fpt, PPM** image_ptr)
+{
+    PPM* ppm;
+    ppm = malloc(sizeof(PPM));
+    int r = 0; int g = 0; int b=0;   
+    if(ppm == NULL)
+    {
+        fprintf(stderr, "allocate ppm error\n");
+    }
+
+    strncpy(ppm->type, type, 3);
+    ignora_comentario(fpt);
+    
+    fscanf(fpt, " %d %d ", &(ppm->width), &(ppm->height));
+    
+    fscanf(fpt, "%d ", &(ppm->max)); 
+
+    ppm->matriz_pixel = (Pixel**)malloc(ppm->height * sizeof(Pixel*));
+    if(!ppm->matriz_pixel){ 
+        fprintf(stderr, "memory alocate error");
+        exit(0);
+    }
+    for (int i = 0; i < ppm->height; i++)
+    {
+        ppm->matriz_pixel[i] = (Pixel*) malloc(ppm->width * sizeof(Pixel));
+        if(!ppm->matriz_pixel[i]){
+            fprintf(stderr, "memory alocate error");
+        }
+    }
+             
+    for(int i=0; i<ppm->height; i++)
+    {
+        for (int j = 0; j < ppm->width; j++)
+        {
+            fscanf(fpt,"%d%d%d", &r, &g, &b);
+            ppm->matriz_pixel[i][j].red   = r;
+            ppm->matriz_pixel[i][j].green = g;
+            ppm->matriz_pixel[i][j].blue  = b;
+        }
+        
+
+    }              
+    
+
+    *image_ptr = ppm;    
 }
