@@ -505,6 +505,21 @@ void create_photomosaic(t_list* tiles_list, PPM* image_ptr, PPM** photomosaic_pt
     }
 
     *photomosaic_ptr = photomosaic;
-    // free(ppm_aux);
-    // free(knot_aux);
+     free(ppm_aux);
+     free(knot_aux);
+}
+
+void free_images(PPM* image_ptr, PPM* photomosaic_ptr)
+{
+    for (int i = 0; i < image_ptr->height; i++)
+    {
+        free (image_ptr->matriz_pixel[i]);
+    }
+    for (int i = 0; i < photomosaic_ptr->height; i++)
+    {
+        free (photomosaic_ptr->matriz_pixel[i]);
+    }
+
+    free(image_ptr);
+    free(photomosaic_ptr);
 }

@@ -23,3 +23,4 @@ void write_image(PPM* ppm, char* output);
 void cut_image(PPM** image_ptr, t_list tiles_list);
 void average_color_image(PPM *ppm, int i, int j, t_list* list, PPM** ppm_aux);
 void create_photomosaic(t_list* tiles_list, PPM* image_ptr, PPM** photomosaic_ptr);
+void free_images(PPM* image_ptr, PPM* photomosaic_ptr);

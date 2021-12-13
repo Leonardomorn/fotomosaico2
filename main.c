@@ -28,6 +28,7 @@ int main (int argc, char* argv[])
     cut_image(&image_ptr, tiles_list);
     create_photomosaic(&tiles_list, image_ptr, &photomosaic);
     write_image(photomosaic, outputtest);
+    free_images(image_ptr, photomosaic);
     destroy_list(&tiles_list);
 
 }
