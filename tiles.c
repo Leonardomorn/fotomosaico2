@@ -114,6 +114,7 @@ void read_tiles(int tiles_num, char *argv[], int argc, t_list* tiles_list)
             changed_dir[k] = def_dir[k];
         changed_dir[size] = '/';
         changed_dir[size + 1] = '\0';
+        //linhas 108 a 116 iguais a 91 a 99 (da pra colocar em um lugar so?)
     }
 
     printf("%s\n", changed_dir);

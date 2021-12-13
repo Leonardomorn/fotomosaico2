@@ -14,7 +14,7 @@ int main (int argc, char* argv[])
     t_list tiles_list;
     initialize_list(&tiles_list);
     PPM* image_ptr = NULL;
-    PPM* image_ptr_new;
+    PPM* photomosaic = NULL;
     int tiles_num = 0;
 
     char* outputtest = "output.ppm";
@@ -26,7 +26,8 @@ int main (int argc, char* argv[])
     read_tiles(tiles_num, argv, argc, &tiles_list);
     read_image(argv, argc, &image_ptr);
     cut_image(&image_ptr, tiles_list);
-    write_image(image_ptr, outputtest);
+    create_photomosaic(&tiles_list, image_ptr, &photomosaic);
+    write_image(photomosaic, outputtest);
     destroy_list(&tiles_list);
 
 }

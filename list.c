@@ -63,6 +63,12 @@ void remove_list(t_list *l)
 
     l->first = knot_aux->next_knot;
     knot_aux->next_knot->prev_knot = NULL;
+    
+    for (int i = 0; i < knot_aux->height; i++)
+    {
+        free (knot_aux->matriz_pixel[i]);
+    }
+        
     free(knot_aux->matriz_pixel);
     free(knot_aux);
     return;
